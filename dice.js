@@ -9,6 +9,13 @@ function rollDice(sides, count) {
 
 // ロールボタンのクリックイベント
 document.getElementById("rollButton").addEventListener("click", function () {
+    // 音楽が再生中かどうかをチェック
+    const diceMusic = document.getElementById("diceMusic");
+    if (!diceMusic.paused) {
+        // 音楽が再生中なら、ダイスロールボタンを無効化
+        return; // 音楽が再生中であれば、何もせずにリターン
+    }
+
     // フォームから入力値を取得
     const numDice = parseInt(document.getElementById("numDice").value, 10);
     const numSides = parseInt(document.getElementById("numSides").value, 10);
@@ -27,8 +34,9 @@ document.getElementById("rollButton").addEventListener("click", function () {
     let intervalId;
 
     // 音楽を再生
-    const diceMusic = document.getElementById("diceMusic");
     diceMusic.play(); // 音楽を再生
+    // ダイスロールボタンを無効化
+    document.getElementById("rollButton").disabled = true;
 
     // 音楽が再生されている間にランダムなダイスの値を表示
     intervalId = setInterval(() => {
@@ -45,13 +53,13 @@ document.getElementById("rollButton").addEventListener("click", function () {
         if (numDice === 1 && numSides === 100) {
             const rollResult = results[0];  // 最初の結果を取り出す
             if (rollResult === 1) {
-                special = "<span style='color: red;'><b>　確定的クリティカル！　</b><span style='color: black;'>(技能成長は以下)<br>１クリ：1d100<br>２～５クリ：1d20<br>成功：1d5<br>失敗：+1<br>ファンブル：なし</span></span>";
+                special = "<span style='color: red;'><b>　確定的クリティカル！　</b></span><span style='color: black;'>（技能成長は以下）<br>１クリ：1d100<br>２～５クリ：1d20<br>成功：1d5<br>失敗：+1<br>ファンブル：なし</span>";
             } else if (rollResult <= 5) {
-                special = "<span style='color: red;'><b>　クリティカル！　</b><span style='color: black;'>(技能成長は以下)<br>１クリ：1d20<br>２～５クリ：1d10<br>成功：1d3<br>失敗・ファンブル：なし</span></span>";
+                special = "<span style='color: red;'><b>　クリティカル！　</b></span><span style='color: black;'>（技能成長は以下）<br>１クリ：1d20<br>２～５クリ：1d10<br>成功：1d3<br>失敗・ファンブル：なし</span>";
             } else if (rollResult === 100) {
-                special = "<span style='color: red;'><b>　致命的ファンブル</b>(残念ですねぇ！）</span>";
+                special = "<span style='color: red;'><b>　致命的ファンブル！　</b></span><span style='color: black;'>（残念ですねぇ！）</span>";
             } else if (rollResult >= 96) {
-                special = "<span style='color: red;'><b>　ファンブル</b>(おゎぁぁぁ…)</span>";
+                special = "<span style='color: red;'><b>　ファンブル！　</b></span><span style='color: black;'>（おゎぁぁぁ…）</span>";
             }
         
             finalText = `ロール結果: ${results.join(", ")} ${special}`;
@@ -64,6 +72,8 @@ document.getElementById("rollButton").addEventListener("click", function () {
 
         // innerHTML を使って結果を挿入
         resultElement.innerHTML = finalText; // HTMLを挿入してスタイル適用
+
+        // 音楽終了後、ボタンを再度有効化
+        document.getElementById("rollButton").disabled = false;
     };
 });
-
