@@ -1,10 +1,10 @@
 // ダイスを振る関数
 function rollDice(sides, count) {
-    let results = [];//変数を用意
-    for (let i = 0; i < count; i = i+1) {
+    let results = [];
+    for (let i = 0; i < count; i++) {
         results.push(Math.floor(Math.random() * sides) + 1);
     }
-    console.table(results)
+    console.table(results);
     return results;
 }
 
@@ -20,29 +20,32 @@ document.getElementById("rollButton").addEventListener("click", function () {
         return;
     }
 
-    if (numDice == 1 && numSides == 100 ){
-        const results = rollDice(numSides,numDice);
-        if(results == 1){
-            let special = "(確定的クリティカル)"
-        } else if (results <= 5){
-            let special = "(クリティカル)"
-        } else if (results == 100){
-            let special = "(致命的ファンブル)"
-        } else if (results >= 96){
-            let special = "(ファンブル)"
-        } else {
-            let special = ""
+    let special = "";
+    // 100面ダイスの場合の特別な処理
+    if (numDice === 1 && numSides === 100) {
+        const results = rollDice(numSides, numDice);
+        const rollResult = results[0];  // 最初の結果を取り出す
+
+        if (rollResult === 1) {
+            special = "(確定的クリティカル)";
+        } else if (rollResult >= 2 && rollResult <= 5) {
+            special = "(クリティカル)";
+        } else if (rollResult === 100) {
+            special = "(致命的ファンブル)";
+        } else if (rollResult >= 96) {
+            special = "(ファンブル)";
         }
+        
         // 結果を表示
         document.getElementById("result").textContent =
-            `ロール結果: ${results.join} ${special}`
+            `ロール結果: ${results.join(", ")} ${special}`;
+    } else {
+        // 通常のダイスロールを実行
+        const results = rollDice(numSides, numDice);
+        const total = results.reduce((sum, value) => sum + value, 0);
+
+        // 結果を表示
+        document.getElementById("result").textContent =
+            `ロール結果: ${results.join(", ")} 合計: ${total}`;
     }
-
-    // ダイスロールを実行
-    const results = rollDice(numSides, numDice);
-    const total = results.reduce((sum, value) => sum + value, 0);
-
-    // 結果を表示
-    document.getElementById("result").textContent =
-        `ロール結果: ${results.join(", ")} (合計: ${total})`;
 });
