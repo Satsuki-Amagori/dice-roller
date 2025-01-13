@@ -20,6 +20,24 @@ document.getElementById("rollButton").addEventListener("click", function () {
         return;
     }
 
+    if (numDice == 1 && numSides == 100 ){
+        const results = rollDice(numSides,numDice);
+        if(results == 1){
+            let special = "(確定的クリティカル)"
+        } else if (results <= 5){
+            let special = "(クリティカル)"
+        } else if (results == 100){
+            let special = "(致命的ファンブル)"
+        } else if (results >= 96){
+            let special = "(ファンブル)"
+        } else {
+            let special = ""
+        }
+        // 結果を表示
+        document.getElementById("result").textContent =
+            `ロール結果: ${results.join} ${special}`
+    }
+
     // ダイスロールを実行
     const results = rollDice(numSides, numDice);
     const total = results.reduce((sum, value) => sum + value, 0);
