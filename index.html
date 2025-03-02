@@ -7,37 +7,38 @@
     <link rel="stylesheet" href="https://satsuki-amagori.github.io/wikipedia/style.css">
 </head>
 <body>
-    <header>
-        <h1>CoCダイスロール</h1>
-    </header>
+    <div class="container">
+        <header>
+            <h1>CoCダイスロール</h1>
+        </header>
 
-    <main>
-        <p><a href="https://satsuki-amagori.github.io/magics/">魔法検索エンジンはこちら</a></p>
-        <p><a href="https://satsuki-amagori.github.io/wikipedia/">雨氷卓世界観百科はこちら</a></p>
+        <main>
+            <p><a href="https://satsuki-amagori.github.io/magics/">魔法検索エンジンはこちら</a></p>
+            <p><a href="https://satsuki-amagori.github.io/wikipedia/">雨氷卓世界観百科はこちら</a></p>
+    
+            <form id="diceForm">
+                <label for="numDice">ダイスの回数:</label>
+                <input type="number" id="numDice" name="numDice" min="1" value="1" required>
 
-        <form id="diceForm">
-            <label for="numDice">ダイスの回数:</label>
-            <input type="number" id="numDice" name="numDice" min="1" value="1" required>
+                <label for="numSides">ダイスの面数:</label>
+                <input type="number" id="numSides" name="numSides" min="1" value="100" required>
 
-            <label for="numSides">ダイスの面数:</label>
-            <input type="number" id="numSides" name="numSides" min="1" value="100" required>
+                <button type="button" id="rollButton">ダイスロール！</button>
+            </form>
 
-            <button type="button" id="rollButton">ダイスロール！</button>
-        </form>
+            <h2>結果</h2>
+            <p id="result"></p>
 
-        <h2>結果</h2>
-        <p id="result"></p>
+            <!-- 音楽再生用 -->
+            <audio id="diceMusic" src="dice-music.mp3" preload="auto"></audio>
+        </main>
 
-        <!-- 音楽再生用 -->
-        <audio id="diceMusic" src="dice-music.mp3" preload="auto"></audio>
-    </main>
-
-    <footer>
-        <div class="footer">
-            <a href="https://satsuki-amagori.github.io/portal/">ポータルページへ戻る</a>
-        </div>
-    </footer>
-
+        <footer>
+            <div class="footer">
+                <a href="https://satsuki-amagori.github.io/portal/">ポータルページへ戻る</a>
+            </div>
+        </footer>
+    </div>
     <script src="dice.js"></script>
 </body>
 </html>
