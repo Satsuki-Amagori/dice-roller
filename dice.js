@@ -9,21 +9,13 @@ function rollDice(sides, count) {
 
 // ロールボタンのクリックイベント
 document.getElementById("rollButton").addEventListener("click", function () {
-    // 音楽が再生中かどうかをチェック
     const diceMusic = document.getElementById("diceMusic");
-    if (!diceMusic.paused) {
-        // 音楽が再生中なら、ダイスロールボタンを無効化
-        return; // 音楽が再生中であれば、何もせずにリターン
-    }
+    if (!diceMusic.paused) return;
 
-    // フォームから入力値を取得
     const numDice = parseInt(document.getElementById("numDice").value, 10);
     const numSides = parseInt(document.getElementById("numSides").value, 10);
-
-    // 結果表示用の要素を取得
     const resultElement = document.getElementById("result");
 
-    // バリデーション
     if (numDice <= 0 || numSides <= 0) {
         resultElement.textContent = "正しい数値を入力してください。";
         return;
@@ -33,25 +25,20 @@ document.getElementById("rollButton").addEventListener("click", function () {
     let results = [];
     let intervalId;
 
-    // 音楽を再生
-    diceMusic.play(); // 音楽を再生
-    // ダイスロールボタンを無効化
+    diceMusic.play();
     document.getElementById("rollButton").disabled = true;
 
-    // 音楽が再生されている間にランダムなダイスの値を表示
     intervalId = setInterval(() => {
-        results = rollDice(numSides, numDice); // ダイスロールを実行
+        results = rollDice(numSides, numDice);
         resultElement.textContent = `ロール中: ${results.join(", ")}`;
-    }, 100); // 0.1秒ごとに乱数を更新
+    }, 100);
 
-    // 音楽が終了した後に結果を表示
     diceMusic.onended = function () {
-        clearInterval(intervalId); // 乱数の表示を停止
+        clearInterval(intervalId);
 
-        let finalText = ""; // 結果表示用のHTML
-
+        let finalText = "";
         if (numDice === 1 && numSides === 100) {
-            const rollResult = results[0];  // 最初の結果を取り出す
+            const rollResult = results[0];
             if (rollResult === 1) {
                 special = "<span style='color: red;'><b>　確定的クリティカル！　</b></span><span style='color: black;'>（技能成長は以下）<br>１クリ：1d100<br>２～５クリ：1d20<br>成功：1d5<br>失敗：+1<br>ファンブル：なし</span>";
             } else if (rollResult <= 5) {
@@ -61,7 +48,6 @@ document.getElementById("rollButton").addEventListener("click", function () {
             } else if (rollResult >= 96) {
                 special = "<span style='color: red;'><b>　ファンブル！　</b></span><span style='color: black;'>（おゎぁぁぁ…）</span>";
             }
-        
             finalText = `ロール結果: ${results.join(", ")} ${special}`;
         } else if (numDice > 1) {
             const total = results.reduce((sum, value) => sum + value, 0);
@@ -70,10 +56,29 @@ document.getElementById("rollButton").addEventListener("click", function () {
             finalText = `ロール結果: ${results.join(", ")}`;
         }
 
-        // innerHTML を使って結果を挿入
-        resultElement.innerHTML = finalText; // HTMLを挿入してスタイル適用
-
-        // 音楽終了後、ボタンを再度有効化
+        resultElement.innerHTML = finalText;
         document.getElementById("rollButton").disabled = false;
+
+        // 11d16 のときにカウントダウン付き転送
+        if (numDice === 11 && numSides === 16) {
+            const countdownElement = document.createElement("p");
+            countdownElement.style.color = "blue";
+            countdownElement.style.fontWeight = "bold";
+            countdownElement.style.fontSize = "1.2em";
+            countdownElement.textContent = "5秒後に転送されます...";
+            resultElement.appendChild(countdownElement);
+
+            let secondsLeft = 5;
+            const countdownInterval = setInterval(() => {
+                secondsLeft--;
+                if (secondsLeft > 0) {
+                    countdownElement.textContent = `${secondsLeft} 秒後に転送されます...`;
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = "転送中...";
+                    window.location.href = "https://script.google.com/macros/s/AKfycbyzszdnAqC4Ovk5GfPysVJonSy1BvuUTPP3gA578dbMBnH3zTgeYYBaMjQ9ysBGrYYt9Q/exec";
+                }
+            }, 1000);
+        }
     };
 });
