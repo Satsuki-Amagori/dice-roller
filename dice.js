@@ -60,25 +60,56 @@ document.getElementById("rollButton").addEventListener("click", function () {
         document.getElementById("rollButton").disabled = false;
 
         // 11d16 のときにカウントダウン付き転送
-        if (numDice === 11 && numSides === 16) {
-            const countdownElement = document.createElement("p");
-            countdownElement.style.color = "blue";
-            countdownElement.style.fontWeight = "bold";
-            countdownElement.style.fontSize = "1.2em";
-            countdownElement.textContent = "5秒後に転送されます...";
-            resultElement.appendChild(countdownElement);
+       if (numDice === 11 && numSides === 16 && total >= 90) {
+           startTransferSequence();
+       }
+        // 転送演出の関数
+function startTransferSequence() {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100vw";
+    overlay.style.height = "100vh";
+    overlay.style.backgroundColor = "black";
+    overlay.style.color = "lime";
+    overlay.style.fontFamily = "monospace";
+    overlay.style.fontSize = "1.5em";
+    overlay.style.display = "flex";
+    overlay.style.justifyContent = "center";
+    overlay.style.alignItems = "center";
+    overlay.style.flexDirection = "column";
+    overlay.style.zIndex = 9999;
+    document.body.appendChild(overlay);
 
-            let secondsLeft = 5;
-            const countdownInterval = setInterval(() => {
-                secondsLeft--;
-                if (secondsLeft > 0) {
-                    countdownElement.textContent = `${secondsLeft} 秒後に転送されます...`;
-                } else {
-                    clearInterval(countdownInterval);
-                    countdownElement.textContent = "転送中...";
+    const message = document.createElement("div");
+    overlay.appendChild(message);
+
+    const text = "アクセスキー認証中...\n転送プロトコル起動...\n転送開始まで 5 秒";
+    let i = 0;
+
+    function typeText() {
+        if (i < text.length) {
+            message.textContent += text[i] === "\n" ? "\n" : text[i];
+            i++;
+            setTimeout(typeText, 50);
+        } else {
+            // フェードアウト
+            setTimeout(() => {
+                overlay.style.transition = "opacity 2s ease";
+                overlay.style.opacity = 0;
+                setTimeout(() => {
                     window.location.href = "https://script.google.com/macros/s/AKfycbyzszdnAqC4Ovk5GfPysVJonSy1BvuUTPP3gA578dbMBnH3zTgeYYBaMjQ9ysBGrYYt9Q/exec";
-                }
+                }, 2000);
             }, 1000);
         }
+    }
+
+    typeText();
+}
+
+
+        }
     };
+    
 });
