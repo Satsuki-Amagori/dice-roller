@@ -77,7 +77,7 @@ document.getElementById("rollButton").addEventListener("click", function () {
                 } else {
                     clearInterval(countdownInterval);
                     countdownElement.textContent = "転送中...";
-                    window.location.href = "https://script.google.com/macros/s/AKfycbyzszdnAqC4Ovk5GfPysVJonSy1BvuUTPP3gA578dbMBnH3zTgeYYBaMjQ9ysBGrYYt9Q/exec";
+                    window.location.href = "https://satsuki-amagori.github.io/wikipedia/pages/concept/34009e687a0cb10a4637c1a40d24b4e47ea3ba749d07a4e647f0538a93367c769b23ec0ffcaa23b2173629382d9e5948ef6b64528f64f92ee50657c0e617ccec.html";
                 }
             }, 1000);
         }
